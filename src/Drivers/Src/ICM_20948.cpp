@@ -43,8 +43,17 @@ Common::ICMPackage ICM20948::getPacket()
         Serial.println("Waiting for data");
         delay(500);
     }
-
     Common::ICMPackage package;
+
+    package.accX = icm.accX();
+    package.accY = icm.accY();
+    package.accZ = icm.accZ();
+    package.gyrX = icm.gyrX();
+    package.gyrY = icm.gyrY();
+    package.gyrZ = icm.gyrZ();
+    package.magX = icm.magX();
+    package.magY = icm.magY();
+    package.magZ = icm.magZ();
     for (int i = 0; i < Settings::Device::NumOfPackets; i++)
     {}
     return package;

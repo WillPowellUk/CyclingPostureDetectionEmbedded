@@ -5,9 +5,9 @@ namespace Common
     #pragma pack(push,1)
     struct ICMPackage
     {
-        float accelX;
-        float accelY;
-        float accelZ;
+        float accX;
+        float accY;
+        float accZ;
         float gyrX;
         float gyrY;
         float gyrZ;

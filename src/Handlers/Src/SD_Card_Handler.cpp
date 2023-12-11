@@ -42,7 +42,7 @@ void SDHandler::createCSVFile()
 
     // Each IMU has 9 data columns
     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
-        header << "Accel X (mg),Accel Y (mg),Accel Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT),";
+        header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT),";
     }
 
     // Write the complete header to the CSV file
