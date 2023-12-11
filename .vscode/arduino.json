@@ -1,0 +1,6 @@
+{
+    "board": "arduino:samd:nano_33_iot",
+    "port": "COM7",
+    "sketch": "CyclingPostureDetectionEmbedded.ino",
+    "output": "C:\\vsCode builds\\CyclingPostureDetectionEmbedded"
+}
