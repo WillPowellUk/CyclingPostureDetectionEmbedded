@@ -9,7 +9,7 @@ public:
     IMUHandler();
 
     bool init();
-    std::vector<Common::ICMPackage> getPackets();
+    std::vector<Common::IMUPackage> getPackets();
 private:
     QWIICMUX mux;
     ICM20948 **imu; //Create pointer to a set of pointers to the icm class

@@ -3,7 +3,7 @@
 namespace Common
 {   
     #pragma pack(push,1)
-    struct ICMPackage
+    struct IMUPackage
     {
         float accX;
         float accY;

@@ -3,16 +3,16 @@
 #include <vector>
 
 
-class SDHandler: public SDCard
+class SDCardHandler: public SDCard
 {
 public:
     // constructor
-    SDHandler();
+    SDCardHandler();
 
     // main fn to store new recorded data to SD card as a CSV file
-    void storeNewPacket(std::vector<Common::ICMPackage> ICMPackage, std::vector<Common::EMGPackage> EMGPackage);
+    void storeNewPacket(std::vector<unsigned long> timestamps, std::vector<std::vector<Common::IMUPackage>> IMUPackage, std::vector<std::vector<Common::EMGPackage>> EMGPackage);
+    void createCSVFile();
 
 private:
-    void createCSVFile();
     
 };

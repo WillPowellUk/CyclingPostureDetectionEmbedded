@@ -18,6 +18,12 @@ namespace Pinout
         constexpr const int DATA3 = 13;
         constexpr const int DATA4 = 12;
     } // namespace SD
+
+    /*        EMG          */
+    namespace EMG
+    {
+        constexpr const int Pin[3] = {A0, A1, A2};
+    }
     
 
 } // namespace Pinout

@@ -44,10 +44,9 @@ bool IMUHandler::init()
     }
 }
 
-std::vector<Common::ICMPackage> IMUHandler::getPackets() 
+std::vector<Common::IMUPackage> IMUHandler::getPackets() 
 {
-    std::vector<Common::ICMPackage> packets;
-    
+    std::vector<Common::IMUPackage> packets;
     for (byte x = 0; x < Settings::Device::NumOfIMUs; x++)
     {
         packets.push_back(imu[x]->getPacket());

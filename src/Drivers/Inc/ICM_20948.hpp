@@ -6,7 +6,7 @@ class ICM20948
 {
 public:
   bool init();
-  Common::ICMPackage getPacket();
+  Common::IMUPackage getPacket();
   void printFormattedData();
   void printRawData();
 private:

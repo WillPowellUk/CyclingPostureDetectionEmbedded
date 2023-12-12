@@ -3,12 +3,12 @@
 #include <string>
 #include <sstream>
 
-SDHandler::SDHandler()
+SDCardHandler::SDCardHandler()
 {
 }
 
 
-void SDHandler::createCSVFile()
+void SDCardHandler::createCSVFile()
 {
   // creates directory if necessary and creates new filelocation name
   // e.g. folderName = "/PostureDetectionData/Device 0"
@@ -21,6 +21,8 @@ void SDHandler::createCSVFile()
   // e.g. csvHeader = "Device 0"
   char csvHeader[50];
   sprintf(csvHeader, "%s", Settings::Device::DeviceID);
+
+  writeFile(latestFileLocation, csvHeader); 
 
     std::stringstream header;
 
@@ -42,15 +44,14 @@ void SDHandler::createCSVFile()
 
     // Each IMU has 9 data columns
     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
-        header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT),";
+        header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT)\n";
     }
 
     // Write the complete header to the CSV file
     writeFile(latestFileLocation, header.str().c_str());
 }
-
-
-void SDHandler::storeNewPacket(std::vector<Common::ICMPackage> ICMPackage, std::vector<Common::EMGPackage> EMGPackage)
+   
+void SDCardHandler::storeNewPacket(std::vector<unsigned long> timestamps, std::vector<std::vector<Common::IMUPackage>> IMUPackage, std::vector<std::vector<Common::EMGPackage>> EMGPackage)
 { 
     File file = SD.open(latestFileLocation, FILE_WRITE);
     if(!file)
@@ -61,13 +62,41 @@ void SDHandler::storeNewPacket(std::vector<Common::ICMPackage> ICMPackage, std::
       return;
     }
 
-    for (int i = 0; i < Settings::Device::NumOfPackets; i++)
+    // Write the timestamp and EMG data to the CSV file
+    for (int t = 0; t < timestamps.size(); t++) 
     {
-        for (byte x = 0; x < Settings::Device::NumOfIMUs; x++)
+        file.print(timestamps[t]);
+        for (int i = 0; i < Settings::Device::NumOfIMUs; i++) 
         {
-            packets.push_back(imu[x]->getPacket());
+            file.print(",");
+            file.print(IMUPackage[t][i].accX);
+            file.print(",");
+            file.print(IMUPackage[t][i].accY);
+            file.print(",");
+            file.print(IMUPackage[t][i].accZ);
+            file.print(",");
+            file.print(IMUPackage[t][i].gyrX);
+            file.print(",");
+            file.print(IMUPackage[t][i].gyrY);
+            file.print(",");
+            file.print(IMUPackage[t][i].gyrZ);
+            file.print(",");
+            file.print(IMUPackage[t][i].magX);
+            file.print(",");
+            file.print(IMUPackage[t][i].magY);
+            file.print(",");
+            file.print(IMUPackage[t][i].magZ);
+            file.print(",");
         }
+        for(int e = 0; e < Settings::Device::NumOfEMGs; e++) 
+        {
+            file.print(EMGPackage[t][e].signal);
+            file.print(",");
+        }
+
+        file.println();
     }
-    
+
+    file.close();
 }
 
