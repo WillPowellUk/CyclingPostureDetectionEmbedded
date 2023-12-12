@@ -23,16 +23,17 @@ void setup()
   while (true)
   {
     std::vector<std::vector<Common::IMUPackage>> imuPackets;
-    std::vector<std::vector<Common::EMGPackage>> emgPacekts;
+    std::vector<std::vector<Common::EMGPackage>> emgPackets;
     std::vector<unsigned long> timestamps;
 
     for (int i = 0; i < Settings::Device::NumOfPackets; i++)
     {
       timestamps.push_back(micros());
       imuPackets.push_back(imu.getPackets());
-      emgPacekts.push_back(emg.getPackets());
+      emgPackets.push_back(emg.getPackets());
     }
-    sd.storeNewPacket(timestamps, imuPackets, emgPacekts);
+    Common::SDCardPackage package(timestamps, imuPackets, emgPackets); // Check the constructor of Common::SDCardPackage class
+    sd.storeNewPacket(package);
   }
 }
 

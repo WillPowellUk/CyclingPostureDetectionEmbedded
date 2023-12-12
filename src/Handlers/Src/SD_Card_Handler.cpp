@@ -51,46 +51,46 @@ void SDCardHandler::createCSVFile()
     writeFile(latestFileLocation, header.str().c_str());
 }
    
-void SDCardHandler::storeNewPacket(std::vector<unsigned long> timestamps, std::vector<std::vector<Common::IMUPackage>> IMUPackage, std::vector<std::vector<Common::EMGPackage>> EMGPackage)
-{ 
+void SDCardHandler::storeNewPacket(Common::SDCardPackage package)
+{
     File file = SD.open(latestFileLocation, FILE_WRITE);
-    if(!file)
+    if (!file)
     {
-      Serial.print("Failed to open ");
-      Serial.print(latestFileLocation);
-      Serial.println(" for appending");
-      return;
+        Serial.print("Failed to open ");
+        Serial.print(latestFileLocation);
+        Serial.println(" for appending");
+        return;
     }
 
     // Write the timestamp and EMG data to the CSV file
-    for (int t = 0; t < timestamps.size(); t++) 
+    for (int t = 0; t < package.timestamps.size(); t++)
     {
-        file.print(timestamps[t]);
-        for (int i = 0; i < Settings::Device::NumOfIMUs; i++) 
+        file.print(package.timestamps[t]);
+        for (int i = 0; i < Settings::Device::NumOfIMUs; i++)
         {
             file.print(",");
-            file.print(IMUPackage[t][i].accX);
+            file.print(package.IMUPackage[t][i].accX);
             file.print(",");
-            file.print(IMUPackage[t][i].accY);
+            file.print(package.IMUPackage[t][i].accY);
             file.print(",");
-            file.print(IMUPackage[t][i].accZ);
+            file.print(package.IMUPackage[t][i].accZ);
             file.print(",");
-            file.print(IMUPackage[t][i].gyrX);
+            file.print(package.IMUPackage[t][i].gyrX);
             file.print(",");
-            file.print(IMUPackage[t][i].gyrY);
+            file.print(package.IMUPackage[t][i].gyrY);
             file.print(",");
-            file.print(IMUPackage[t][i].gyrZ);
+            file.print(package.IMUPackage[t][i].gyrZ);
             file.print(",");
-            file.print(IMUPackage[t][i].magX);
+            file.print(package.IMUPackage[t][i].magX);
             file.print(",");
-            file.print(IMUPackage[t][i].magY);
+            file.print(package.IMUPackage[t][i].magY);
             file.print(",");
-            file.print(IMUPackage[t][i].magZ);
+            file.print(package.IMUPackage[t][i].magZ);
             file.print(",");
         }
-        for(int e = 0; e < Settings::Device::NumOfEMGs; e++) 
+        for (int e = 0; e < Settings::Device::NumOfEMGs; e++)
         {
-            file.print(EMGPackage[t][e].signal);
+            file.print(package.EMGPackage[t][e].signal);
             file.print(",");
         }
 
