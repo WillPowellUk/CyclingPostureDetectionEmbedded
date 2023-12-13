@@ -23,26 +23,28 @@ void setup()
   SDCardHandler sd;
 
   imu.init();
-  imu.getPackets();
   // emg.init();
   // sd.init();
   //sd.createCSVFile();
 
-  // while (true)
-  // {
-  //   std::vector<std::vector<Common::IMUPackage>> imuPackets;
-  //   std::vector<std::vector<Common::EMGPackage>> emgPackets;
-  //   std::vector<unsigned long> timestamps;
+  while (true)
+  {
+    std::vector<std::vector<Common::IMUPackage>> imuPackets;
+    std::vector<std::vector<Common::EMGPackage>> emgPackets;
+    std::vector<unsigned long> timestamps;
 
-  //   for (int i = 0; i < Settings::Device::NumOfPackets; i++)
-  //   {
-  //     timestamps.push_back(micros());
-  //     imuPackets.push_back(imu.getPackets());
-  //     emgPackets.push_back(emg.getPackets());
-  //   }
-  //   Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
-  //   sd.storeNewPacket(package);   
-  // }
+    imu.getPackets();
+    delay(1000);
+
+    // for (int i = 0; i < Settings::Device::NumOfPackets; i++)
+    // {
+    //   timestamps.push_back(micros());
+    //   imuPackets.push_back(imu.getPackets());
+    //   emgPackets.push_back(emg.getPackets());
+    // }
+    // Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
+    // sd.storeNewPacket(package); 
+  }
 }
 
 void loop()
