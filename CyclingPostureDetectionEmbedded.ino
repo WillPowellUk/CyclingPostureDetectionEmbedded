@@ -5,8 +5,6 @@
 #include "src/Settings/Settings.h"
 #include "src/utils/inc/commonParams.hpp"
 
-#define DEBUG
-
 void setup()
 {
   #ifdef DEBUG
@@ -23,7 +21,7 @@ void setup()
   SDCardHandler sd;
 
   imu.init();
-  // emg.init();
+  emg.init();
   // sd.init();
   //sd.createCSVFile();
 
@@ -33,17 +31,18 @@ void setup()
     std::vector<std::vector<Common::EMGPackage>> emgPackets;
     std::vector<unsigned long> timestamps;
 
-    imu.getPackets();
-    delay(1000);
+    for (int i = 0; i < Settings::Device::NumOfPacketsPerBatch; i++)
+    {
+      timestamps.push_back(micros());
+      imuPackets.push_back(imu.getPackets());
+      emgPackets.push_back(emg.getPackets());
+    }
+    Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
+    // sd.storeNewPacket(package);
 
-    // for (int i = 0; i < Settings::Device::NumOfPackets; i++)
-    // {
-    //   timestamps.push_back(micros());
-    //   imuPackets.push_back(imu.getPackets());
-    //   emgPackets.push_back(emg.getPackets());
-    // }
-    // Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
-    // sd.storeNewPacket(package); 
+    #ifdef DEBUG
+    delay(1000);
+    #endif
   }
 }
 

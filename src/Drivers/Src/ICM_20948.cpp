@@ -33,10 +33,10 @@ Common::IMUPackage ICM20948::getPacket()
         delay(500);
     }
 
-    icm.getAGMT();
-                        
+    icm.getAGMT(); // updates readings from the ICM20948
+    #ifdef DEBUG        
     printRawData(); 
-    delay(500);
+    #endif
     Common::IMUPackage package(icm.accX(), icm.accY(), icm.accZ(), icm.gyrX(), icm.gyrY(), icm.gyrZ(), icm.magX(), icm.magY(), icm.magZ());
 
     return package;

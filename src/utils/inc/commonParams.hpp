@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <Arduino.h>
 
 namespace Common
 {   
@@ -27,7 +28,7 @@ namespace Common
     #pragma pack(push,1)
     struct EMGPackage
     {
-        int signal;
+        uint16_t  signal;
     };
     #pragma pack(pop)
 

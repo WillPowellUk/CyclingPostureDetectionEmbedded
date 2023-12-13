@@ -3,6 +3,7 @@
 
 namespace Settings
 {
+  #define DEBUG // Comment out to disable debug messages
   namespace Network
   {
     /* Ip address of server (PC) and port */
@@ -23,8 +24,8 @@ namespace Settings
     constexpr const char* DeviceID = "Device 0";
     constexpr const bool OnlineMode = false;
     constexpr const int NumOfIMUs = 1; 
-    constexpr const int NumOfEMGs = 1; 
-    constexpr const int NumOfPackets = 10;
+    constexpr const int NumOfEMGs = 3; 
+    constexpr const int NumOfPacketsPerBatch = 10; // Number of packets to send to sd card per batch
   } // namespace Device
   
   namespace IMU
