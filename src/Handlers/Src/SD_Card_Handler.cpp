@@ -10,7 +10,7 @@ SDCardHandler::SDCardHandler()
 
 void SDCardHandler::createCSVFile()
 {
-  // creates directory if necessary and creates new filelocation name
+  // creates directory if necessary and creates new file location name
   // e.g. folderName = "/PostureDetectionData/Device 0"
   char folderName[50];
   sprintf(folderName, "/%s/%s", Settings::SD::RootDirectory, Settings::Device::DeviceID);
@@ -49,6 +49,8 @@ void SDCardHandler::createCSVFile()
 
     // Write the complete header to the CSV file
     writeFile(latestFileLocation, header.str().c_str());
+
+    Serial.println("Created New File");
 }
    
 void SDCardHandler::storeNewPacket(Common::SDCardPackage package)
@@ -69,34 +71,32 @@ void SDCardHandler::storeNewPacket(Common::SDCardPackage package)
         for (int i = 0; i < Settings::Device::NumOfIMUs; i++)
         {
             file.print(",");
-            file.print(package.IMUPackage[t][i].accX);
+            file.print(package.imuPackets[t][i].accX);
             file.print(",");
-            file.print(package.IMUPackage[t][i].accY);
+            file.print(package.imuPackets[t][i].accY);
             file.print(",");
-            file.print(package.IMUPackage[t][i].accZ);
+            file.print(package.imuPackets[t][i].accZ);
             file.print(",");
-            file.print(package.IMUPackage[t][i].gyrX);
+            file.print(package.imuPackets[t][i].gyrX);
             file.print(",");
-            file.print(package.IMUPackage[t][i].gyrY);
+            file.print(package.imuPackets[t][i].gyrY);
             file.print(",");
-            file.print(package.IMUPackage[t][i].gyrZ);
+            file.print(package.imuPackets[t][i].gyrZ);
             file.print(",");
-            file.print(package.IMUPackage[t][i].magX);
+            file.print(package.imuPackets[t][i].magX);
             file.print(",");
-            file.print(package.IMUPackage[t][i].magY);
+            file.print(package.imuPackets[t][i].magY);
             file.print(",");
-            file.print(package.IMUPackage[t][i].magZ);
+            file.print(package.imuPackets[t][i].magZ);
             file.print(",");
         }
         for (int e = 0; e < Settings::Device::NumOfEMGs; e++)
         {
-            file.print(package.EMGPackage[t][e].signal);
+            file.print(package.emgPackets[t][e].signal);
             file.print(",");
         }
 
         file.println();
     }
-
     file.close();
 }
-

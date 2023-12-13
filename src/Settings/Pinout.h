@@ -2,6 +2,14 @@
 
 namespace Pinout 
 {
+
+    /*        I2C Mux Pinout          */
+    namespace I2CMux
+    {
+        constexpr const int SDA = A4;
+        constexpr const int SCL = A5;
+    } // namespace IMU
+
     /*        IMU Pinout          */
     namespace IMU
     {
@@ -11,12 +19,10 @@ namespace Pinout
     /*        SD Pinout          */
     namespace SD
     {
-        constexpr const int DATA1 = 4;
-        constexpr const int DATA0 = 2;
-        constexpr const int CLK = 14;
-        constexpr const int CMD = 15;
-        constexpr const int DATA3 = 13;
-        constexpr const int DATA4 = 12;
+        constexpr const int MOSI = 11;
+        constexpr const int MISO = 12;
+        constexpr const int CLK = 13;
+        constexpr const int CS = 10;
     } // namespace SD
 
     /*        EMG          */

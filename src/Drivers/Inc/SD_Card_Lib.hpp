@@ -9,13 +9,13 @@ class SDCard
 public:
   //constructor - checks sd card and creates new recording directory and txt file
   SDCard();
+  //checks if sd is mounted
+  void init();
   void testFileIO(const char * path);
   void appendFile(const char* path, const char* message);
   char* latestFileLocation;
 
 protected:
-  //checks if sd is mounted and prints size
-  void checkSD();
   //set latestFileLocation as next valid csv file in directory
   void getLatestFile(const char* dirname);
   void listDir(const char* dirname, uint8_t levels);

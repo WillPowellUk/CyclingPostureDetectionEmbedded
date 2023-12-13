@@ -6,10 +6,7 @@
 
 
 bool ICM20948::init() 
-{
-    Wire.begin();
-    Wire.setClock(400000);
-
+{    
     //icm.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
 
     bool initialized = false;
@@ -17,13 +14,12 @@ bool ICM20948::init()
     {
         icm.begin(Wire, Pinout::IMU::AD0_VAL);
 
-        Serial.print(F("Initialization of the icm returned: "));
-        Serial.println(icm.statusString());
         if (icm.status != ICM_20948_Stat_Ok)
         {
-            Serial.println("Trying again...");
+            Serial.println("Could not connect to ICM_20948, retrying in 0.5s");
             delay(500);
         }
+        else initialized = true; 
     }
 
     return true;
@@ -31,30 +27,18 @@ bool ICM20948::init()
 
 Common::IMUPackage ICM20948::getPacket() 
 {
-    if (icm.dataReady())
+    while (!icm.dataReady())
     {
-        icm.getAGMT();
-                          
-        printRawData(); 
-        delay(30);
-    }
-    else
-    {
-        Serial.println("Waiting for data");
+        Serial.println("Waiting for  imu data");
         delay(500);
     }
-    Common::IMUPackage package;
 
-    package.accX = icm.accX();
-    package.accY = icm.accY();
-    package.accZ = icm.accZ();
-    package.gyrX = icm.gyrX();
-    package.gyrY = icm.gyrY();
-    package.gyrZ = icm.gyrZ();
-    package.magX = icm.magX();
-    package.magY = icm.magY();
-    package.magZ = icm.magZ();
-    
+    icm.getAGMT();
+                        
+    printRawData(); 
+    delay(500);
+    Common::IMUPackage package(icm.accX(), icm.accY(), icm.accZ(), icm.gyrX(), icm.gyrY(), icm.gyrZ(), icm.magX(), icm.magY(), icm.magZ());
+
     return package;
 }
 

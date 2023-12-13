@@ -3,20 +3,16 @@
 
 SDCard::SDCard()
 {
-  pinMode(Pinout::SD::DATA1, INPUT_PULLUP);
-  pinMode(Pinout::SD::DATA0, INPUT_PULLUP);
-  pinMode(Pinout::SD::DATA3, INPUT_PULLUP);
-  pinMode(Pinout::SD::DATA4, INPUT_PULLUP);
-  pinMode(Pinout::SD::CMD, INPUT_PULLUP);
-
-  //ensures sd is mounted and formatted ok
-  checkSD();
 }
 
 
-void SDCard::checkSD()
+void SDCard::init()
 {
-  if (!SD.begin(Pinout::SD::CMD))
+  pinMode(Pinout::SD::MISO, INPUT_PULLUP);
+  pinMode(Pinout::SD::MOSI, OUTPUT);
+  pinMode(Pinout::SD::CLK, OUTPUT);
+  pinMode(Pinout::SD::CS, INPUT_PULLUP);
+  if (!SD.begin(Pinout::SD::CS))
   {
     delay(1000);
     Serial.println("\n\n!!!!!!!!!!!!!!!!!!!!!!!!");

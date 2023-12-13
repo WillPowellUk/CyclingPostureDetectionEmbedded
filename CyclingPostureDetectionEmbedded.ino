@@ -3,6 +3,8 @@
 #include "src/Handlers/Inc/SD_Card_Handler.hpp"
 
 #include "src/Settings/Settings.h"
+#include "src/utils/inc/commonParams.hpp"
+
 #define DEBUG
 
 void setup()
@@ -10,6 +12,10 @@ void setup()
   #ifdef DEBUG
   Serial.begin(115200);
   delay(3000);
+  Serial.println("Cycling Posture Dection System Running");
+  // while (!Serial) {
+  //   ; // wait for serial port to connect
+  // }
   #endif
 
   IMUHandler imu;
@@ -17,24 +23,26 @@ void setup()
   SDCardHandler sd;
 
   imu.init();
-  emg.init();
-  sd.createCSVFile();
+  imu.getPackets();
+  // emg.init();
+  // sd.init();
+  //sd.createCSVFile();
 
-  while (true)
-  {
-    std::vector<std::vector<Common::IMUPackage>> imuPackets;
-    std::vector<std::vector<Common::EMGPackage>> emgPackets;
-    std::vector<unsigned long> timestamps;
+  // while (true)
+  // {
+  //   std::vector<std::vector<Common::IMUPackage>> imuPackets;
+  //   std::vector<std::vector<Common::EMGPackage>> emgPackets;
+  //   std::vector<unsigned long> timestamps;
 
-    for (int i = 0; i < Settings::Device::NumOfPackets; i++)
-    {
-      timestamps.push_back(micros());
-      imuPackets.push_back(imu.getPackets());
-      emgPackets.push_back(emg.getPackets());
-    }
-    Common::SDCardPackage package(timestamps, imuPackets, emgPackets); // Check the constructor of Common::SDCardPackage class
-    sd.storeNewPacket(package);
-  }
+  //   for (int i = 0; i < Settings::Device::NumOfPackets; i++)
+  //   {
+  //     timestamps.push_back(micros());
+  //     imuPackets.push_back(imu.getPackets());
+  //     emgPackets.push_back(emg.getPackets());
+  //   }
+  //   Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
+  //   sd.storeNewPacket(package);   
+  // }
 }
 
 void loop()

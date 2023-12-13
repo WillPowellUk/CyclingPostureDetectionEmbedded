@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 namespace Common
 {   
@@ -14,6 +15,12 @@ namespace Common
         float magX;
         float magY;
         float magZ;
+
+        // Constructor
+        IMUPackage(float _accX, float _accY, float _accZ, float _gyrX, float _gyrY, float _gyrZ, float _magX, float _magY, float _magZ)
+            : accX(_accX), accY(_accY), accZ(_accZ), gyrX(_gyrX), gyrY(_gyrY), gyrZ(_gyrZ), magX(_magX), magY(_magY), magZ(_magZ)
+        {
+        }
     };
     #pragma pack(pop)
 
@@ -24,20 +31,17 @@ namespace Common
     };
     #pragma pack(pop)
 
-    #pragma pack(push,1)
-    struct SDCardPackage
-    {
+    struct SDCardPackage {
+        public:
         std::vector<unsigned long> timestamps;
-        std::vector<std::vector<IMUPackage>> IMUPackage;
-        std::vector<std::vector<EMGPackage>> EMGPackage;
+        std::vector<std::vector<Common::IMUPackage>> imuPackets;
+        std::vector<std::vector<Common::EMGPackage>> emgPackets;
 
-        SDCardPackage(std::vector<unsigned long> ts,
-                      std::vector<std::vector<Common::IMUPackage>> imu,
-                      std::vector<std::vector<Common::EMGPackage>> emg)
-            : timestamps(ts), IMUPackage(imu), EMGPackage(emg)
-        {
+        // Constructor
+        SDCardPackage(const std::vector<unsigned long>& _timestamps,
+                    const std::vector<std::vector<Common::IMUPackage>>& _imuPackets,
+                    const std::vector<std::vector<Common::EMGPackage>>& _emgPackets)
+            : timestamps(_timestamps), imuPackets(_imuPackets), emgPackets(_emgPackets) {
         }
     };
-    #pragma pack(pop)
-    
 } // namespace Common

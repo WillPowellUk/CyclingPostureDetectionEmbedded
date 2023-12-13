@@ -8,7 +8,11 @@ IMUHandler::IMUHandler()
 
 bool IMUHandler::init()
 {
+    Wire.begin();
+    Wire.setClock(400000);
+
     //Assign pointers to instances of the class
+    imu = new ICM20948*[Settings::Device::NumOfIMUs];
     for (int x = 0; x < Settings::Device::NumOfIMUs; x++)
         imu[x] = new ICM20948();
 
@@ -28,7 +32,7 @@ bool IMUHandler::init()
     for (byte x = 0; x < Settings::Device::NumOfIMUs; x++)
     {
         mux.setPort(x);
-        if (imu[x]->init() != 0)
+        if (!imu[x]->init())
         {
             Serial.print("Sensor ");
             Serial.print(x);
