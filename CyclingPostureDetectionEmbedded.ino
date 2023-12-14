@@ -4,6 +4,7 @@
 
 #include "src/Settings/Settings.h"
 #include "src/utils/inc/commonParams.hpp"
+#include "src/utils/inc/functions.hpp"
 
 void setup()
 {
@@ -25,25 +26,28 @@ void setup()
   sd.init();
   sd.createCSVFile();
   
-  // while (true)
-  // {
-  //   std::vector<std::vector<Common::IMUPackage>> imuPackets;
-  //   std::vector<std::vector<Common::EMGPackage>> emgPackets;
-  //   std::vector<unsigned long> timestamps;
+  while (true)
+  {
+    std::vector<std::vector<Common::IMUPackage>> imuPackets;
+    std::vector<std::vector<Common::EMGPackage>> emgPackets;
+    std::vector<unsigned long> timestamps;
 
-  //   for (int i = 0; i < Settings::Device::NumOfPacketsPerBatch; i++)
-  //   {
-  //     timestamps.push_back(micros());
-  //     imuPackets.push_back(imu.getPackets());
-  //     emgPackets.push_back(emg.getPackets());
-  //   }
-  //   Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
-  //   // sd.storeNewPacket(package);
+    for (int i = 0; i < Settings::Device::NumOfPacketsPerBatch; i++)
+    {
+      timestamps.push_back(micros());
+      imuPackets.push_back(imu.getPackets());
+      // #ifdef DEBUG
+      // utils::printIMUPackets(imuPackets);
+      // #endif
+      emgPackets.push_back(emg.getPackets());
+    }
+    Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
+    sd.storeNewPacket(package);
 
-  //   #ifdef DEBUG
-  //   delay(1000);
-  //   #endif
-  // }
+    #ifdef DEBUG
+    delay(1000);
+    #endif
+  }
 }
 
 void loop()

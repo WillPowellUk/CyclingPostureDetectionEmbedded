@@ -10,6 +10,6 @@ public:
   SDCard();
   //checks if sd is mounted
   void init();
-  void WriteFile(const char *filename, const char *message);
+  void writeFile(const char *filename, const char *message);
   void mkdir(const char *dirPath);
 };

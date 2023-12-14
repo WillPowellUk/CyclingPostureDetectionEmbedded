@@ -1,4 +1,5 @@
 #include "../inc/functions.hpp"
+#include <iostream>
 
 namespace utils
 {
@@ -89,4 +90,39 @@ namespace utils
     Serial.print(abs(val));
     }
 
+    void printIMUPackets(const std::vector<Common::IMUPackage>& packets) 
+    {
+    for (const Common::IMUPackage& packet : packets) {
+        Serial.print("accX: ");
+        Serial.println(packet.accX);
+        Serial.print("accY: ");
+        Serial.println(packet.accY);
+        Serial.print("accZ: ");
+        Serial.println(packet.accZ);
+        Serial.print("gyrX: ");
+        Serial.println(packet.gyrX);
+        Serial.print("gyrY: ");
+        Serial.println(packet.gyrY);
+        Serial.print("gyrZ: ");
+        Serial.println(packet.gyrZ);
+        Serial.print("magX: ");
+        Serial.println(packet.magX);
+        Serial.print("magY: ");
+        Serial.println(packet.magY);
+        Serial.print("magZ: ");
+        Serial.println(packet.magZ);
+    }
+    }
+
+    #include <iostream>
+
+    void printEMGPackets(const std::vector<Common::EMGPackage>& packets) 
+    {
+        for (const Common::EMGPackage& packet : packets) {
+            Serial.print("signal: ");
+            Serial.println(packet.signal);
+        }
+    }
 } // namespace utils
+
+

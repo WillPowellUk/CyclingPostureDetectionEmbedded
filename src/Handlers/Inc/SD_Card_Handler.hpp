@@ -14,5 +14,5 @@ public:
     void createCSVFile();
 
 private:
-    
+    char filePath[20];
 };

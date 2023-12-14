@@ -12,9 +12,6 @@ SDCardHandler::SDCardHandler()
 void SDCardHandler::createCSVFile()
 {
     static char dirPath[15];
-    static char filePath[20];
-    // updates latestFileLocation
-    //   char* filePath = getFilePath();
 
     sprintf(dirPath, "%s/%s", Settings::SD::RootDirectory, Settings::Device::DeviceID);
     Serial.println(dirPath);   
@@ -34,48 +31,46 @@ void SDCardHandler::createCSVFile()
     Serial.print("Writing to file: ");
     Serial.println(filePath);
 
-//   // e.g. csvHeader = "Device 0"
-//   char csvHeader[50];
-//   sprintf(csvHeader, "%s", Settings::Device::DeviceID);
+  // e.g. csvHeader = "Device 0"
+  char csvHeader[50];
+  sprintf(csvHeader, "%s", Settings::Device::DeviceID);
 
-//   writeFile(filePath, csvHeader); 
+  writeFile(filePath, csvHeader); 
 
-//     std::stringstream header;
+    std::stringstream header;
 
-//     // Append the EMG header
-//     header << ",";
-//     for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
-//         header << "CH " << (i + 1) << ",";
-//     }
+    // Append the EMG header
+    header << "," << "EMG " << ",";
 
-//     // Append the IMU headers
-//     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
-//         header << "IMU " << (i + 1) << ",,,,,,,,,";
-//     }
+    // Append the IMU headers
+    for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
+        header << "IMU " << (i + 1) << ",,,,,,,,,";
+    }
 
-//     header << "\nTimestamp (uS),";
-//     for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
-//         header << ",";
-//     }
+    header << "\nTimestamp (uS),";
 
-//     // Each IMU has 9 data columns
-//     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
-//         header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT)\n";
-//     }
+    for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
+        header << "CH" << (i + 1) << ",";
+    }
 
-//     // Write the complete header to the CSV file
-//     writeFile(latestFileLocation, header.str().c_str());
+    // Each IMU has 9 data columns
+    for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
+        header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT)\n";
+    }
 
-//     Serial.println("Created New File");
+    // Write the complete header to the CSV file
+    writeFile(filePath, header.str().c_str());
+
+    Serial.println("Created New File");
 }
 
 void SDCardHandler::storeNewPacket(Common::SDCardPackage package)
 {
-    File file = SD.open("test.csv", FILE_WRITE);
+    File file = SD.open(filePath, FILE_WRITE);
     if (!file)
     {
         Serial.print("Failed to open ");
-        Serial.print("test.csv");
+        Serial.print(filePath);
         Serial.println(" for appending");
         return;
     }

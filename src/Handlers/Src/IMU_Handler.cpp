@@ -54,7 +54,7 @@ std::vector<Common::IMUPackage> IMUHandler::getPackets()
     for (byte x = 0; x < Settings::Device::NumOfIMUs; x++)
     {
         #ifdef DEBUG
-        Serial.print("Getting packet from IMU: ");
+        Serial.print("Getting packet from IMU ");
         Serial.println(x);
         #endif
         mux.setPort(x);

@@ -40,7 +40,7 @@ void SDCard::mkdir(const char *dirPath)
   }
 }
 
-void SDCard::WriteFile(const char *filename, const char *message)
+void SDCard::writeFile(const char *filename, const char *message)
 {
   File file = SD.open(filename, FILE_WRITE);
   if (!file)
@@ -49,15 +49,10 @@ void SDCard::WriteFile(const char *filename, const char *message)
     Serial.println(filename);
     return;
   }
-  #ifdef DEBUG
-  if (file.print(message))
-  {
-    Serial.println("File written");
-  }
-  #endif
-  else
+  if (!file.print(message))
   {
     Serial.println("Write failed");
   }
+  
   file.close();
 }
