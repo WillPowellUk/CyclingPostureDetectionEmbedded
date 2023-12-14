@@ -1,17 +1,18 @@
 #include "../Inc/SD_Card_Lib.hpp"
 #include "../../Settings/Pinout.h"
+#include "../../Settings/Settings.h"
+#include <SD.h>
 
 SDCard::SDCard()
 {
 }
 
-
 void SDCard::init()
 {
-  pinMode(Pinout::SD::MISO, INPUT_PULLUP);
-  pinMode(Pinout::SD::MOSI, OUTPUT);
-  pinMode(Pinout::SD::CLK, OUTPUT);
-  pinMode(Pinout::SD::CS, INPUT_PULLUP);
+  // pinMode(Pinout::SD::MISO, INPUT_PULLUP);
+  // pinMode(Pinout::SD::MOSI, OUTPUT);
+  // pinMode(Pinout::SD::CLK, OUTPUT);
+  // pinMode(Pinout::SD::CS, INPUT_PULLUP);
   if (!SD.begin(Pinout::SD::CS))
   {
     delay(1000);
@@ -19,188 +20,44 @@ void SDCard::init()
     Serial.println("Card Mount Failed");
     Serial.println("Insert SD Card and reset");
     Serial.println("!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+    while (true);
   }
-}
-
-
-void SDCard::getLatestFile(const char* dirname)
-{
-  free(latestFileLocation);
-  latestFileLocation = reinterpret_cast<char*>(malloc(50*sizeof(char)));
-  
-  File root = SD.open(dirname);
-  if (!root)
+  else
   {
-    createDir(dirname);
+    Serial.println("SD Card mounted successfully");
   }
+}
 
-  int i = 1;
-  while (root.openNextFile())
+void SDCard::mkdir(const char *dirPath)
+{
+  if (SD.mkdir(dirPath))
   {
-    i++;
-  }
-  sprintf(latestFileLocation, "%s/Recording %d.csv", dirname, i);
-}
-
-void SDCard::listDir(const char * dirname, uint8_t levels)
-{
-  Serial.print("Listing directory: ");
-  Serial.println(dirname);
-
-  File root = SD.open(dirname);
-  if (!root) {
-    Serial.println("Failed to open directory");
-    return;
-  }
-  if (!root.isDirectory()) {
-    Serial.println("Not a directory");
-    return;
-  }
-
-  File file = root.openNextFile();
-  while (file) {
-    if (file.isDirectory()) {
-      Serial.print("  DIR : ");
-      Serial.println(file.name());
-      if (levels) {
-        listDir(file.name(), levels - 1);
-      }
-    } else {
-      Serial.print("  FILE: ");
-      Serial.print(file.name());
-      Serial.print("  SIZE: ");
-      Serial.println(file.size());
-    }
-    file = root.openNextFile();
-  }
-}
-
-void SDCard::createDir(const char * path)
-{
-  Serial.print("Creating Dir: ");
-  Serial.println(path);
-  if (SD.mkdir(path)) {
     Serial.println("Dir created");
-  } else {
+  }
+  else
+  {
     Serial.println("mkdir failed");
   }
 }
 
-void SDCard::removeDir(const char * path)
+void SDCard::WriteFile(const char *filename, const char *message)
 {
-    Serial.print("Removing Dir: ");
-  Serial.println(path);
-  if (SD.rmdir(path)) {
-    Serial.println("Dir removed");
-  } else {
-    Serial.println("rmdir failed");
-  }
-}
-
-void SDCard::readFile(const char* path)
-{
-    Serial.print("Reading Path: ");
-    Serial.println(path);
-
-  File file = SD.open(path);
-  if (!file) {
-    Serial.println("Failed to open file for reading");
-    return;
-  }
-
-  Serial.print("Read from file: ");
-  while (file.available()) {
-    Serial.write(file.read());
-  }
-}
-
-void SDCard::writeFile(const char* path, const char* message)
-{
-  Serial.print("Writing to file: ");
-  Serial.println(path);
-
-  File file = SD.open(path, FILE_WRITE);
+  File file = SD.open(filename, FILE_WRITE);
   if (!file)
   {
-    Serial.println("Failed to open file for writing");
+    Serial.print("Failed to open ");
+    Serial.println(filename);
     return;
   }
-  if(!file.print(message)) 
+  #ifdef DEBUG
+  if (file.print(message))
+  {
+    Serial.println("File written");
+  }
+  #endif
+  else
   {
     Serial.println("Write failed");
   }
-}
-
-void SDCard::appendFile(const char* path, const char* message)
-{
-  File file = SD.open(path, FILE_WRITE);
-  if (!file) {
-    Serial.println("Failed to open file for appending");
-    return;
-  }
-  if (!file.print(message))
-  {
-    Serial.println("Append failed");
-    delay(1000);
-  }
-}
-
-void SDCard::deleteFile(const char * path)
-{
-    Serial.print("Deleting File: ");
-  Serial.println(path);
-  if (SD.remove(path)) {
-    Serial.println("File deleted");
-  } else {
-    Serial.println("Delete failed");
-  }
-}
-
-void SDCard::testFileIO(const char * path)
-{
-  File file = SD.open(path);
-  static uint8_t buf[512];
-  size_t len = 0;
-  uint32_t start = millis();
-  uint32_t end = start;
-  if (file) {
-    len = file.size();
-    size_t flen = len;
-    start = millis();
-    while (len) {
-      size_t toRead = len;
-      if (toRead > 512) {
-        toRead = 512;
-      }
-      file.read(buf, toRead);
-      len -= toRead;
-    }
-    end = millis() - start;
-    Serial.print(flen);
-    Serial.print("bytes read for ");
-    Serial.print(end);
-    Serial.println(" ms");
-    file.close();
-  } else {
-    Serial.println("Failed to open file for reading");
-  }
-
-
-  file = SD.open(path, FILE_WRITE);
-  if (!file) {
-    Serial.println("Failed to open file for writing");
-    return;
-  }
-
-  size_t i;
-  start = millis();
-  for (i = 0; i < 2048; i++) {
-    file.write(buf, 512);
-  }
-  end = millis() - start;
-    Serial.print(2048 * 512);
-    Serial.print("bytes written for ");
-    Serial.print(end);
-    Serial.println(" ms");
   file.close();
 }

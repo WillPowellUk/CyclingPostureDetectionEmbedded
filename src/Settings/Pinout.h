@@ -22,7 +22,7 @@ namespace Pinout
         constexpr const int MOSI = 11;
         constexpr const int MISO = 12;
         constexpr const int CLK = 13;
-        constexpr const int CS = 10;
+        constexpr const int CS = 4;
     } // namespace SD
 
     /*        EMG          */

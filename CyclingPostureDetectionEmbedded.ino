@@ -9,41 +9,41 @@ void setup()
 {
   #ifdef DEBUG
   Serial.begin(115200);
-  delay(3000);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
   Serial.println("Cycling Posture Dection System Running");
-  // while (!Serial) {
-  //   ; // wait for serial port to connect
-  // }
   #endif
 
   IMUHandler imu;
   EMGHandler emg;
   SDCardHandler sd;
 
-  imu.init();
-  emg.init();
-  // sd.init();
-  //sd.createCSVFile();
+  //imu.init();
+  // emg.init();
 
-  while (true)
-  {
-    std::vector<std::vector<Common::IMUPackage>> imuPackets;
-    std::vector<std::vector<Common::EMGPackage>> emgPackets;
-    std::vector<unsigned long> timestamps;
+  sd.init();
+  sd.createCSVFile();
+  
+  // while (true)
+  // {
+  //   std::vector<std::vector<Common::IMUPackage>> imuPackets;
+  //   std::vector<std::vector<Common::EMGPackage>> emgPackets;
+  //   std::vector<unsigned long> timestamps;
 
-    for (int i = 0; i < Settings::Device::NumOfPacketsPerBatch; i++)
-    {
-      timestamps.push_back(micros());
-      imuPackets.push_back(imu.getPackets());
-      emgPackets.push_back(emg.getPackets());
-    }
-    Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
-    // sd.storeNewPacket(package);
+  //   for (int i = 0; i < Settings::Device::NumOfPacketsPerBatch; i++)
+  //   {
+  //     timestamps.push_back(micros());
+  //     imuPackets.push_back(imu.getPackets());
+  //     emgPackets.push_back(emg.getPackets());
+  //   }
+  //   Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
+  //   // sd.storeNewPacket(package);
 
-    #ifdef DEBUG
-    delay(1000);
-    #endif
-  }
+  //   #ifdef DEBUG
+  //   delay(1000);
+  //   #endif
+  // }
 }
 
 void loop()

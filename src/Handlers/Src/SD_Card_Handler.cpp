@@ -2,6 +2,7 @@
 #include "../../Settings/Settings.h"
 #include <string>
 #include <sstream>
+#include <SD.h>
 
 SDCardHandler::SDCardHandler()
 {
@@ -10,56 +11,71 @@ SDCardHandler::SDCardHandler()
 
 void SDCardHandler::createCSVFile()
 {
-  // creates directory if necessary and creates new file location name
-  // e.g. folderName = "/PostureDetectionData/Device 0"
-  char folderName[50];
-  sprintf(folderName, "/%s/%s", Settings::SD::RootDirectory, Settings::Device::DeviceID);
+    static char dirPath[15];
+    static char filePath[20];
+    // updates latestFileLocation
+    //   char* filePath = getFilePath();
 
-  // updates latestFileLocation
-  getLatestFile(folderName);
-
-  // e.g. csvHeader = "Device 0"
-  char csvHeader[50];
-  sprintf(csvHeader, "%s", Settings::Device::DeviceID);
-
-  writeFile(latestFileLocation, csvHeader); 
-
-    std::stringstream header;
-
-    // Append the EMG header
-    header << ",";
-    for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
-        header << "CH " << (i + 1) << ",";
+    sprintf(dirPath, "%s/%s", Settings::SD::RootDirectory, Settings::Device::DeviceID);
+    Serial.println(dirPath);   
+    if (!SD.exists(dirPath))
+    {
+      mkdir(dirPath);
     }
 
-    // Append the IMU headers
-    for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
-        header << "IMU " << (i + 1) << ",,,,,,,,,";
+    int i = 0;
+    while (true) {
+        sprintf(filePath, "%s/Rec%d.csv", dirPath, i);
+        if (!SD.exists(filePath)) {
+            break; // Exit the loop when the file doesn't exist
+        }
+        i++;
     }
+    Serial.print("Writing to file: ");
+    Serial.println(filePath);
 
-    header << "\nTimestamp (uS),";
-    for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
-        header << ",";
-    }
+//   // e.g. csvHeader = "Device 0"
+//   char csvHeader[50];
+//   sprintf(csvHeader, "%s", Settings::Device::DeviceID);
 
-    // Each IMU has 9 data columns
-    for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
-        header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT)\n";
-    }
+//   writeFile(filePath, csvHeader); 
 
-    // Write the complete header to the CSV file
-    writeFile(latestFileLocation, header.str().c_str());
+//     std::stringstream header;
 
-    Serial.println("Created New File");
+//     // Append the EMG header
+//     header << ",";
+//     for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
+//         header << "CH " << (i + 1) << ",";
+//     }
+
+//     // Append the IMU headers
+//     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
+//         header << "IMU " << (i + 1) << ",,,,,,,,,";
+//     }
+
+//     header << "\nTimestamp (uS),";
+//     for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
+//         header << ",";
+//     }
+
+//     // Each IMU has 9 data columns
+//     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
+//         header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT)\n";
+//     }
+
+//     // Write the complete header to the CSV file
+//     writeFile(latestFileLocation, header.str().c_str());
+
+//     Serial.println("Created New File");
 }
-   
+
 void SDCardHandler::storeNewPacket(Common::SDCardPackage package)
 {
-    File file = SD.open(latestFileLocation, FILE_WRITE);
+    File file = SD.open("test.csv", FILE_WRITE);
     if (!file)
     {
         Serial.print("Failed to open ");
-        Serial.print(latestFileLocation);
+        Serial.print("test.csv");
         Serial.println(" for appending");
         return;
     }

@@ -21,7 +21,7 @@ namespace Settings
   
   namespace Device
   {    
-    constexpr const char* DeviceID = "Device 0";
+    constexpr const char* DeviceID = "Device0";
     constexpr const bool OnlineMode = false;
     constexpr const int NumOfIMUs = 1; 
     constexpr const int NumOfEMGs = 3; 
@@ -35,7 +35,7 @@ namespace Settings
 
   namespace SD
   {
-    constexpr const char* RootDirectory = "PostureDetectionData";
+    constexpr const char* RootDirectory = "AML"; // Dir path cannot be longer than 20 characters
   } // namespace SD
   
 

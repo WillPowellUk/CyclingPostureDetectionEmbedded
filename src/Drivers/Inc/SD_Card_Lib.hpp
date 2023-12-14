@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include "SD.h"
 #include "SPI.h"
 
 class SDCard
@@ -11,18 +10,6 @@ public:
   SDCard();
   //checks if sd is mounted
   void init();
-  void testFileIO(const char * path);
-  void appendFile(const char* path, const char* message);
-  char* latestFileLocation;
-
-protected:
-  //set latestFileLocation as next valid csv file in directory
-  void getLatestFile(const char* dirname);
-  void listDir(const char* dirname, uint8_t levels);
-  void createDir(const char* path);
-  void removeDir(const char* path);
-  void readFile(const char* path);
-  void writeFile(const char* path, const char* message);
-  void renameFile(const char* path1, const char* path2);
-  void deleteFile(const char* path);
+  void WriteFile(const char *filename, const char *message);
+  void mkdir(const char *dirPath);
 };
