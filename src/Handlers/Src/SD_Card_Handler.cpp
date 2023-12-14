@@ -9,38 +9,41 @@ SDCardHandler::SDCardHandler()
 }
 
 
-void SDCardHandler::createCSVFile()
+std::string SDCardHandler::createCSVFile()
 {
-    static char dirPath[15];
+    std::string dirPath;
+    
+    dirPath = Settings::SD::RootDirectory;
+    dirPath += "/";
+    dirPath += Settings::Device::DeviceID;
 
-    sprintf(dirPath, "%s/%s", Settings::SD::RootDirectory, Settings::Device::DeviceID);
-    Serial.println(dirPath);   
-    if (!SD.exists(dirPath))
+    Serial.println(dirPath.c_str());   
+    if (!SD.exists(dirPath.c_str()))
     {
-      mkdir(dirPath);
+        mkdir(dirPath.c_str());
     }
 
     int i = 0;
+    std::string filePath;
     while (true) {
-        sprintf(filePath, "%s/Rec%d.csv", dirPath, i);
-        if (!SD.exists(filePath)) {
+        char tempFilePath[50];
+        sprintf(tempFilePath, "%s/Rec%d.csv", dirPath.c_str(), i);
+        filePath = tempFilePath; 
+        if (!SD.exists(filePath.c_str())) {
             break; // Exit the loop when the file doesn't exist
         }
         i++;
     }
     Serial.print("Writing to file: ");
-    Serial.println(filePath);
-
-  // e.g. csvHeader = "Device 0"
-  char csvHeader[50];
-  sprintf(csvHeader, "%s", Settings::Device::DeviceID);
-
-  writeFile(filePath, csvHeader); 
+    Serial.println(filePath.c_str());
 
     std::stringstream header;
 
     // Append the EMG header
-    header << "," << "EMG " << ",";
+    header << "," << "EMG ";
+    for(int i = 0; i < Settings::Device::NumOfEMGs; ++i) {
+        header << ",";
+    }
 
     // Append the IMU headers
     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
@@ -59,18 +62,18 @@ void SDCardHandler::createCSVFile()
     }
 
     // Write the complete header to the CSV file
-    writeFile(filePath, header.str().c_str());
+    writeFile(filePath.c_str(), header.str().c_str());
 
-    Serial.println("Created New File");
+    return filePath;
 }
 
-void SDCardHandler::storeNewPacket(Common::SDCardPackage package)
+void SDCardHandler::storeNewPacket(std::string filePath, Common::SDCardPackage package)
 {
-    File file = SD.open(filePath, FILE_WRITE);
+    File file = SD.open(filePath.c_str(), FILE_WRITE);
     if (!file)
     {
         Serial.print("Failed to open ");
-        Serial.print(filePath);
+        Serial.print(filePath.c_str());
         Serial.println(" for appending");
         return;
     }
@@ -79,31 +82,32 @@ void SDCardHandler::storeNewPacket(Common::SDCardPackage package)
     for (int t = 0; t < package.timestamps.size(); t++)
     {
         file.print(package.timestamps[t]);
-        for (int i = 0; i < Settings::Device::NumOfIMUs; i++)
-        {
-            file.print(",");
-            file.print(package.imuPackets[t][i].accX);
-            file.print(",");
-            file.print(package.imuPackets[t][i].accY);
-            file.print(",");
-            file.print(package.imuPackets[t][i].accZ);
-            file.print(",");
-            file.print(package.imuPackets[t][i].gyrX);
-            file.print(",");
-            file.print(package.imuPackets[t][i].gyrY);
-            file.print(",");
-            file.print(package.imuPackets[t][i].gyrZ);
-            file.print(",");
-            file.print(package.imuPackets[t][i].magX);
-            file.print(",");
-            file.print(package.imuPackets[t][i].magY);
-            file.print(",");
-            file.print(package.imuPackets[t][i].magZ);
-            file.print(",");
-        }
+        file.print(",");
         for (int e = 0; e < Settings::Device::NumOfEMGs; e++)
         {
             file.print(package.emgPackets[t][e].signal);
+            file.print(",");
+        }
+
+        for (int i = 0; i < Settings::Device::NumOfIMUs; i++)
+        {
+            file.print(package.imuPackets[t][i].accX, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].accY, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].accZ, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].gyrX, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].gyrY, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].gyrZ, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].magX, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].magY, Settings::SD::numOfDigitsForFloats);
+            file.print(",");
+            file.print(package.imuPackets[t][i].magZ, Settings::SD::numOfDigitsForFloats);
             file.print(",");
         }
 

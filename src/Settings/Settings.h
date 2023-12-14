@@ -36,6 +36,7 @@ namespace Settings
   namespace SD
   {
     constexpr const char* RootDirectory = "AML"; // Dir path cannot be longer than 20 characters
+    constexpr const int numOfDigitsForFloats = 5; // Number of digits to keep after the decimal point
   } // namespace SD
   
 

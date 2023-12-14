@@ -20,11 +20,14 @@ void setup()
   EMGHandler emg;
   SDCardHandler sd;
 
-  //imu.init();
-  // emg.init();
-
+  imu.init();
+  emg.init();
   sd.init();
-  sd.createCSVFile();
+
+  std::string filePath = sd.createCSVFile();
+
+  // get starting timestamp
+  unsigned long startTimestamp = micros();
   
   while (true)
   {
@@ -34,18 +37,15 @@ void setup()
 
     for (int i = 0; i < Settings::Device::NumOfPacketsPerBatch; i++)
     {
-      timestamps.push_back(micros());
+      timestamps.push_back(micros()-startTimestamp);
       imuPackets.push_back(imu.getPackets());
-      // #ifdef DEBUG
-      // utils::printIMUPackets(imuPackets);
-      // #endif
       emgPackets.push_back(emg.getPackets());
     }
     Common::SDCardPackage package(timestamps, imuPackets, emgPackets);
-    sd.storeNewPacket(package);
+    sd.storeNewPacket(filePath, package);
 
     #ifdef DEBUG
-    delay(1000);
+    delay(2000);
     #endif
   }
 }

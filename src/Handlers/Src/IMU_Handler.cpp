@@ -24,12 +24,8 @@ bool IMUHandler::init()
     }
     Serial.println("Mux detected");
 
-    byte currentPortNumber = mux.getPort();
-    Serial.print("CurrentPort: ");
-    Serial.println(currentPortNumber);
-
     //Initialize all the IMUs
-    for (byte x = 0; x < Settings::Device::NumOfIMUs; x++)
+    for (int x = 0; x < Settings::Device::NumOfIMUs; x++)
     {
         mux.setPort(x);
         if (!imu[x]->init())
@@ -51,7 +47,7 @@ bool IMUHandler::init()
 std::vector<Common::IMUPackage> IMUHandler::getPackets() 
 {
     std::vector<Common::IMUPackage> packets;
-    for (byte x = 0; x < Settings::Device::NumOfIMUs; x++)
+    for (int x = 0; x < Settings::Device::NumOfIMUs; x++)
     {
         #ifdef DEBUG
         Serial.print("Getting packet from IMU ");
@@ -60,6 +56,5 @@ std::vector<Common::IMUPackage> IMUHandler::getPackets()
         mux.setPort(x);
         packets.push_back(imu[x]->getPacket());
     }
-
     return packets;
 }

@@ -90,9 +90,9 @@ namespace utils
     Serial.print(abs(val));
     }
 
-    void printIMUPackets(const std::vector<Common::IMUPackage>& packets) 
+    void printIMUPackets(std::vector<Common::IMUPackage> packets) 
     {
-    for (const Common::IMUPackage& packet : packets) {
+    for (Common::IMUPackage& packet : packets) {
         Serial.print("accX: ");
         Serial.println(packet.accX);
         Serial.print("accY: ");

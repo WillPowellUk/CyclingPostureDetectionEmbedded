@@ -7,6 +7,6 @@ namespace utils
 {
     void printFormattedFloat(float val, uint8_t leading, uint8_t decimals);
     void printPaddedInt16b(int16_t val);
-    void printIMUPackets(const std::vector<Common::IMUPackage>& packets);
+    void printIMUPackets(std::vector<Common::IMUPackage> packets);
     void printEMGPackets(const std::vector<Common::EMGPackage>& packets);
 } // namespace utils
