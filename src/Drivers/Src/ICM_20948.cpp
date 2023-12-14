@@ -6,22 +6,18 @@
 
 
 bool ICM20948::init() 
-{    
-    //icm.enableDebugging(); // Uncomment this line to enable helpful debug messages on Serial
+{   
+    #ifdef DEBUG 
+    icm.enableDebugging();
+    #endif
 
-    bool initialized = false;
-    while (!initialized)
+    icm.begin(Wire, Pinout::IMU::AD0_VAL);
+
+    if (icm.status != ICM_20948_Stat_Ok)
     {
-        icm.begin(Wire, Pinout::IMU::AD0_VAL);
-
-        if (icm.status != ICM_20948_Stat_Ok)
-        {
-            Serial.println("Could not connect to ICM_20948, retrying in 0.5s");
-            delay(500);
-        }
-        else initialized = true; 
+        Serial.println("Could not connect to ICM_20948");
+        return false;
     }
-
     return true;
 }
 
@@ -29,8 +25,10 @@ Common::IMUPackage ICM20948::getPacket()
 {
     while (!icm.dataReady())
     {
-        Serial.println("Waiting for  imu data");
-        delay(500);
+        #ifdef DEBUG
+        Serial.println("Waiting for imu data");
+        #endif
+        delay(1);
     }
 
     icm.getAGMT(); // updates readings from the ICM20948

@@ -58,8 +58,9 @@ std::string SDCardHandler::createCSVFile()
 
     // Each IMU has 9 data columns
     for(int i = 0; i < Settings::Device::NumOfIMUs; ++i) {
-        header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT)\n";
+        header << "Acc X (mg),Acc Y (mg),Acc Z (mg),Gyr X (DPS),Gyr Y (DPS),Gyr Z (DPS),Mag X (uT),Mag Y (uT),Mag Z (uT)" << ",";
     }
+    header << "\n";
 
     // Write the complete header to the CSV file
     writeFile(filePath.c_str(), header.str().c_str());
@@ -110,7 +111,6 @@ void SDCardHandler::storeNewPacket(std::string filePath, Common::SDCardPackage p
             file.print(package.imuPackets[t][i].magZ, Settings::SD::numOfDigitsForFloats);
             file.print(",");
         }
-
         file.println();
     }
     file.close();

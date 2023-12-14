@@ -19,13 +19,12 @@ bool IMUHandler::init()
     if (!mux.begin())
     {
         Serial.println("Mux not detected. Freezing...");
-        while (1)
-        ;
+        while (true);
     }
     Serial.println("Mux detected");
 
     //Initialize all the IMUs
-    for (int x = 0; x < Settings::Device::NumOfIMUs; x++)
+    for (int x = 0; x < 1; x++) // Settings::Device::NumOfIMUs; x++)
     {
         mux.setPort(x);
         if (!imu[x]->init())
@@ -51,10 +50,10 @@ std::vector<Common::IMUPackage> IMUHandler::getPackets()
     {
         #ifdef DEBUG
         Serial.print("Getting packet from IMU ");
-        Serial.println(x);
+        Serial.println(0);
         #endif
-        mux.setPort(x);
-        packets.push_back(imu[x]->getPacket());
+        mux.setPort(0);
+        packets.push_back(imu[0]->getPacket());
     }
     return packets;
 }
