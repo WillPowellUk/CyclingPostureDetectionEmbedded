@@ -13,8 +13,8 @@ void setup()
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
-  Serial.println("Cycling Posture Dection System Running");
   #endif
+  Serial.println("Cycling Posture Dection System Running");
 
   IMUHandler imu;
   EMGHandler emg;

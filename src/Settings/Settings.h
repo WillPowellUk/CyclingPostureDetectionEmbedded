@@ -3,7 +3,7 @@
 
 namespace Settings
 {
-  #define DEBUG // Comment out to disable debug messages
+  // #define DEBUG // Comment out to disable debug messages
   namespace Network
   {
     /* Ip address of server (PC) and port */
