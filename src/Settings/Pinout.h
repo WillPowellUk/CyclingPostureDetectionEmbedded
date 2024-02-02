@@ -22,13 +22,13 @@ namespace Pinout
         constexpr const int MOSI = 11;
         constexpr const int MISO = 12;
         constexpr const int CLK = 13;
-        constexpr const int CS = 4;
+        constexpr const int CS = 10;
     } // namespace SD
 
     /*        EMG          */
     namespace EMG
     {
-        constexpr const int Pin[3] = {A0, A1, A2};
+        constexpr const int Pin[3] = {A0, A1, A2}; // Corresponds to EMG0, EMG1, EMG2
     }
     
 

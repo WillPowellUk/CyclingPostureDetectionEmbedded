@@ -24,7 +24,7 @@ bool IMUHandler::init()
     Serial.println("Mux detected");
 
     //Initialize all the IMUs
-    for (int x = 0; x < 1; x++) // Settings::Device::NumOfIMUs; x++)
+    for (int x = 0; x < Settings::Device::NumOfIMUs; x++)
     {
         mux.setPort(x);
         if (!imu[x]->init())
@@ -41,6 +41,8 @@ bool IMUHandler::init()
             Serial.println(" configured");
         }
     }
+    Serial.println("All sensors configured");
+    return true;
 }
 
 std::vector<Common::IMUPackage> IMUHandler::getPackets() 

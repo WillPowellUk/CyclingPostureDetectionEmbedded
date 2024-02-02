@@ -1,6 +1,7 @@
 {
-    "board": "arduino:samd:nano_33_iot",
-    "port": "COM7",
+    "board": "arduino:esp32:nano_nora",
+    "port": "COM13",
     "sketch": "CyclingPostureDetectionEmbedded.ino",
-    "output": "C:\\vsCode builds\\CyclingPostureDetectionEmbedded"
+    "output": "C:\\vsCode builds\\CyclingPostureDetectionEmbedded",
+    "configuration": "PartitionScheme=default,PinNumbers=default,USBMode=default"
 }
