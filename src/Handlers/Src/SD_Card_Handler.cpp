@@ -69,7 +69,7 @@ std::string SDCardHandler::createCSVFile()
 
 void SDCardHandler::storeNewPacket(std::string filePath, Common::SDCardPackage package)
 {
-    File file = SD.open(filePath.c_str(), FILE_WRITE);
+    File file = SD.open(filePath.c_str(), FILE_APPEND);
     if (!file)
     {
         Serial.print("Failed to open ");
