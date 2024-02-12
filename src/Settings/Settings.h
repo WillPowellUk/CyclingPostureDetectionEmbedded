@@ -3,7 +3,7 @@
 
 namespace Settings
 {
-  #define DEBUG // Comment out to disable debug messages
+  // #define DEBUG // Comment out to disable debug messages
   namespace Network
   {
     /* Ip address of server (PC) and port */
@@ -13,7 +13,6 @@ namespace Settings
     constexpr const char* WiFi_Logins[][2] = 
     { 
       // {SSID, Password}
-      // {"DoWiFi", "hackedwifi"},
       {"SSID", "password"},
       {"OtherSSIDs", "blahblah"}
     };
@@ -23,14 +22,14 @@ namespace Settings
   {    
     constexpr const char* DeviceID = "Device0";
     constexpr const bool OnlineMode = false;
-    constexpr const int NumOfIMUs = 3; 
+    constexpr const int NumOfIMUs = 3;
     constexpr const int NumOfEMGs = 3; 
-    constexpr const int NumOfPacketsPerBatch = 10; // Number of packets to send to sd card per batch
+    constexpr const int NumOfPacketsPerBatch = 1; // Number of packets to send to sd card per batch
   } // namespace Device
   
   namespace IMU
   {
-
+    constexpr const uint16_t SamplingRate = 100; // Hz
   } // namespace IMU
 
   namespace SD
