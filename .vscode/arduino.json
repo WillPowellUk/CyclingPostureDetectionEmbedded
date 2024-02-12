@@ -2,6 +2,5 @@
     "board": "arduino:esp32:nano_nora",
     "port": "COM13",
     "sketch": "CyclingPostureDetectionEmbedded.ino",
-    "output": "C:\\vsCode builds\\CyclingPostureDetectionEmbedded",
-    "configuration": "PartitionScheme=default,PinNumbers=default,USBMode=default"
+    "output": "C:\\vsCode builds\\CyclingPostureDetectionEmbedded"
 }
