@@ -24,7 +24,7 @@ namespace Settings
     constexpr const bool OnlineMode = false;
     constexpr const int NumOfIMUs = 3;
     constexpr const int NumOfEMGs = 3; 
-    constexpr const int NumOfPacketsPerBatch = 1; // Number of packets to send to sd card per batch
+    constexpr const int NumOfPacketsPerBatch = 1000; // Number of packets to send to sd card per batch
   } // namespace Device
   
   namespace IMU
