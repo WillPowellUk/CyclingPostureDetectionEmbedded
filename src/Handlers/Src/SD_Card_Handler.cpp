@@ -12,10 +12,9 @@ SDCardHandler::SDCardHandler()
 std::string SDCardHandler::createCSVFile()
 {
     std::string dirPath;
-    
     dirPath = Settings::SD::RootDirectory;
-    dirPath += "/";
-    dirPath += Settings::Device::DeviceID;
+    // dirPath += "/";
+    // dirPath += Settings::Device::DeviceID;
 
     Serial.println(dirPath.c_str());   
     if (!SD.exists(dirPath.c_str()))

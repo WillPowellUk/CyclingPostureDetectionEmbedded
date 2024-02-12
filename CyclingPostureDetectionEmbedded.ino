@@ -13,6 +13,7 @@ void setup()
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
+  delay(1000);
   #endif
   Serial.println("Cycling Posture Dection System Running");
 

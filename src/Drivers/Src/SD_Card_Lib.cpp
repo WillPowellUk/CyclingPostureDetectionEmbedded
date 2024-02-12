@@ -9,10 +9,10 @@ SDCard::SDCard()
 
 void SDCard::init()
 {
-  // pinMode(Pinout::SD::MISO, INPUT_PULLUP);
-  // pinMode(Pinout::SD::MOSI, OUTPUT);
-  // pinMode(Pinout::SD::CLK, OUTPUT);
-  // pinMode(Pinout::SD::CS, INPUT_PULLUP);
+  pinMode(Pinout::SD::MISO, INPUT_PULLUP);
+  pinMode(Pinout::SD::MOSI, OUTPUT);
+  pinMode(Pinout::SD::CLK, OUTPUT);
+  pinMode(Pinout::SD::CS, INPUT_PULLUP);
   if (!SD.begin(Pinout::SD::CS))
   {
     delay(1000);
@@ -30,6 +30,8 @@ void SDCard::init()
 
 void SDCard::mkdir(const char *dirPath)
 {
+  Serial.print("Creating dir: ");
+  Serial.println(dirPath);
   if (SD.mkdir(dirPath))
   {
     Serial.println("Dir created");
