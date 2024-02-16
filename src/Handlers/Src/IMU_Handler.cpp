@@ -54,8 +54,8 @@ std::vector<Common::IMUPackage> IMUHandler::getPackets()
         Serial.print("Getting packet from IMU ");
         Serial.println(x);
         #endif
-        mux.setPort(0);
-        packets.push_back(imu[0]->getPacket());
+        mux.setPort(x);
+        packets.push_back(imu[x]->getPacket());
     }
     return packets;
 }

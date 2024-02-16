@@ -10,6 +10,8 @@ public:
     SDCardHandler();
 
     // main fn to store new recorded data to SD card as a CSV file
-    void storeNewPacket(std::string filePath, Common::SDCardPackage package);
+    void storeNewPacket(std::string filePath, Common::SDCardPackageIMUEMG& package);
+    void storeNewPacket(std::string filePath, Common::SDCardPackageEMG& package);
+    void storeNewPacket(std::string filePath, Common::SDCardPackageIMU& package);
     std::string createCSVFile();
 };
